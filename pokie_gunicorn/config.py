@@ -1,7 +1,7 @@
 import multiprocessing
 
 
-# pokie_mail SMTP configuration
+# pokie_gunicorn configuration
 class GunicornConfigTemplate:
     GUNICORN_WORKERS = (multiprocessing.cpu_count() * 2) + 1
     GUNICORN_BIND = "localhost:5000"
