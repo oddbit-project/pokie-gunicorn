@@ -1,6 +1,5 @@
 # Welcome to Pokie-gunicorn
 
-[![Tests](https://github.com/oddbit-project/pokie-gunicorn/workflows/Tests/badge.svg?branch=master)](https://github.com/oddbit-project/pokie-gunicorn/actions)
 [![pypi](https://img.shields.io/pypi/v/pokie-gunicorn.svg)](https://pypi.org/project/pokie-gunicorn/)
 [![license](https://img.shields.io/pypi/l/pokie-gunicorn.svg)](https://git.oddbit.org/OddBit/pokie-gunicorn/src/branch/master/LICENSE)
 
