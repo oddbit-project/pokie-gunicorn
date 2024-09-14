@@ -5,12 +5,13 @@ from argparse import ArgumentParser
 
 from pokie.constants import DI_SERVICES, DI_FLASK, DI_CONFIG
 from pokie.core import CliCommand
+import __main__
 
 
 class GunicornApp(gunicorn.app.base.BaseApplication):
-    def __init__(self, app, options=None):
+    def __init__(self, factory, options=None):
         self.options = options or {}
-        self.application = app
+        self.factory = factory
         super().__init__()
 
     def load_config(self):
@@ -23,14 +24,24 @@ class GunicornApp(gunicorn.app.base.BaseApplication):
             self.cfg.set(key.lower(), value)
 
     def load(self):
-        return self.application
+        _, app = self.factory()
+        return app
 
 
 class RunCmd(CliCommand):
+    BUILDER_FN = "build_pokie"
     ENV_PREFIX = "GUNICORN_"
     description = "run gunicorn server"
 
     def run(self, args) -> bool:
+        if not callable(getattr(__main__, self.BUILDER_FN, None)):
+            self.tty.error(
+                "Error: missing factory {}() in the main application file".format(
+                    self.BUILDER_FN
+                )
+            )
+            return False
+
         self.tty.write("Running gunicorn...")
         options = {
             "bind": "%s:%s" % ("localhost", "5000"),
@@ -56,6 +67,6 @@ class RunCmd(CliCommand):
                     var_name = name[len(self.ENV_PREFIX) :].lower()
                     options[var_name] = value
 
-        GunicornApp(self.get_di().get(DI_FLASK), options).run()
+        GunicornApp(getattr(__main__, self.BUILDER_FN), options).run()
 
         return True
