@@ -13,7 +13,9 @@ When running with no configuration, it will assume the following options:
 - bind: localhost:5000
 - threads: cpu_count * 4
 - keepalive: 2
-
+- accesslog: -
+- errorlog: -
+- loglevel: debug
 
 
 ## Configuration
