@@ -47,6 +47,9 @@ class RunCmd(CliCommand):
             "bind": "%s:%s" % ("localhost", "5000"),
             "workers": (multiprocessing.cpu_count() * 2) + 1,
             "threads": (multiprocessing.cpu_count() * 4),
+            "accesslog": "-",
+            "errorlog": "-",
+            "loglevel": "debug",
         }
 
         found_config = False
