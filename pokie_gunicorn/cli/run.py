@@ -52,7 +52,7 @@ class RunCmd(CliCommand):
             "loglevel": "debug",
         }
 
-        found_config = False
+        configured_keys = []
 
         # first, lookup for gunicorn_ vars in pokie config
         conf_prefix = self.ENV_PREFIX.lower()
@@ -61,14 +61,14 @@ class RunCmd(CliCommand):
             if name.startswith(conf_prefix):
                 var_name = name[len(conf_prefix) :]
                 options[var_name] = cfg.get(name)
-                found_config = True
+                configured_keys.append(name)
 
-        if not found_config:
-            # if not found in config, lookup for GUNICORN_ vars in env
-            for name, value in os.environ.items():
+        # lookup for GUNICORN_ vars in env
+        for name, value in os.environ.items():
                 if name.startswith(self.ENV_PREFIX):
-                    var_name = name[len(self.ENV_PREFIX) :].lower()
-                    options[var_name] = value
+                    if name.lower() not in configured_keys:
+                        var_name = name[len(self.ENV_PREFIX) :].lower()
+                        options[var_name] = value
 
         GunicornApp(getattr(__main__, self.BUILDER_FN), options).run()
 
