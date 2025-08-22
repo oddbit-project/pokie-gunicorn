@@ -12,6 +12,7 @@ When running with no configuration, it will assume the following options:
 - workers: (cpu_count * 2) + 1
 - bind: localhost:5000
 - threads: cpu_count * 4
+- timeout: 3600
 - keepalive: 2
 - accesslog: -
 - errorlog: -
